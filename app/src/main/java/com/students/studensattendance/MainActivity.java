@@ -1,39 +1,19 @@
 package com.students.studensattendance;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.ProgressBar;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
-import com.google.gson.JsonObject;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 public class MainActivity extends AppCompatActivity {
-     List<StudentInfo> list;
+   //  List<StudentInfo> list;
      RecyclerView recyclerView;
      SwipeRefreshLayout  swipeRefreshLayout;
-    ExecutorService executor;
+   // ExecutorService executor;
     ProgressBar progressBar;
     @SuppressLint("MissingInflatedId")
     @Override
@@ -45,15 +25,7 @@ public class MainActivity extends AppCompatActivity {
         swipeRefreshLayout=findViewById(R.id.refreshLayout);
         UserViewModel  userViewModel= new ViewModelProvider(this).get(UserViewModel.class);
 
-        userViewModel.getListMutableLiveData().observe(this, new Observer<List<StudentInfo>>() {
-            @Override
-            public void onChanged(List<StudentInfo> studentInfos) {
-                Log.e("Mainactivity","DDD: "+studentInfos.get(0).getStudentName());
-
-            }
-
-
-        });
+        userViewModel.getListMutableLiveData().observe(this, studentInfos -> Log.e("Mainactivity","DDD: "+studentInfos.get(0).getStudentName()));
 
         /*StringRequest stringRequest= new StringRequest("https://demo.todesign.in/admin/api/students", response -> {
             try {

@@ -7,8 +7,6 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.View
-import android.widget.Toast
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
 import com.students.studensattendance.`interface`.onCheckNetWorkState
@@ -16,17 +14,16 @@ import com.students.studensattendance.adapter.StudentsAdapter
 import com.students.studensattendance.apirequest.RetrofitRequest
 import com.students.studensattendance.databinding.StudentAttendanceBinding
 import com.students.studensattendance.repositroy.StudentRepositroy
-import com.students.studensattendance.util.CheckNetworkConnetion
 import com.students.studensattendance.util.MyReceiver
 import com.students.studensattendance.util.NetworkConnection
 import com.students.studensattendance.viewmodel.StudentsViewModel
 import com.students.studensattendance.viewmodelhelper.StudentViewModelHelper
 
 class StudentsAttendanceActivity : AppCompatActivity(), onCheckNetWorkState {
-   lateinit var  studentsViewModel: StudentsViewModel
-   lateinit var binding: StudentAttendanceBinding
-   lateinit var checkNetworkConnetion: CheckNetworkConnetion
-   lateinit var myReceiver: MyReceiver
+    private lateinit var  studentsViewModel: StudentsViewModel
+    private  lateinit var binding: StudentAttendanceBinding
+   //lateinit var checkNetworkConnetion: CheckNetworkConnetion
+   private lateinit var myReceiver: MyReceiver
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = StudentAttendanceBinding.inflate(layoutInflater)
@@ -63,7 +60,7 @@ class StudentsAttendanceActivity : AppCompatActivity(), onCheckNetWorkState {
              }else{
                  showBar()
              }
-             binding.refreshLayout2.setRefreshing(false)
+             binding.refreshLayout2.isRefreshing = false
          }
 
     }
@@ -75,37 +72,35 @@ class StudentsAttendanceActivity : AppCompatActivity(), onCheckNetWorkState {
           snackbar.show()
       //  binding.textView9.text="Looks like you are offline, please switch on mobile data or wifi and try again"
 
-        Handler(Looper.getMainLooper()).postDelayed(Runnable {
-            binding.refreshLayout2.setRefreshing(false)
+        Handler(Looper.getMainLooper()).postDelayed({
+            binding.refreshLayout2.isRefreshing = false
          },3000)
     }
 
     private fun loadingData() {
-        binding.refreshLayout2.setRefreshing(true)
+        binding.refreshLayout2.isRefreshing = true
         val request = RetrofitRequest.getInstance()
         val repositroy = StudentRepositroy(request)
         studentsViewModel = ViewModelProvider(this,StudentViewModelHelper(repositroy))[StudentsViewModel::class.java]
         studentsViewModel.getStudentDetails()
-        studentsViewModel.getStudentsData().observe(this, Observer {
-           // Log.e("Data list","List: "+ it.get(0).Student_name)
-            binding.progressBar2.visibility=View.GONE
+        studentsViewModel.getStudentsData().observe(this) {
+            // Log.e("Data list","List: "+ it.get(0).Student_name)
+            binding.progressBar2.visibility = View.GONE
             binding.refreshLayout2.setRefreshing(false)
-            if (it!=null) {
+            if (it != null) {
                 val adapter = StudentsAdapter()
                 adapter.setstudentList(it, applicationContext)
                 binding.recyclerView.adapter = adapter
-            }else{
+            }
+        }
+
+        studentsViewModel.getLoadingStats().observe(this) {
+            when (it) {
+                true -> binding.progressBar2.visibility = View.VISIBLE
+                false -> binding.progressBar2.visibility = View.GONE
 
             }
-        })
-
-        studentsViewModel.getLoadingStats().observe(this, Observer {
-            when(it){
-                true -> binding.progressBar2.visibility= View.VISIBLE
-                false -> binding.progressBar2.visibility=View.GONE
-
-            }
-        })
+        }
     }
 
     override fun isnetWorkRefresh(b: Boolean) {
@@ -126,8 +121,6 @@ class StudentsAttendanceActivity : AppCompatActivity(), onCheckNetWorkState {
 
     override fun onPause() {
         super.onPause()
-        if(myReceiver!=null){
-            applicationContext.unregisterReceiver(myReceiver)
-        }
+        applicationContext.unregisterReceiver(myReceiver)
     }
 }
