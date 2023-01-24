@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.students.studensattendance.R
 import com.students.studensattendance.databinding.StudentRowBinding
@@ -19,9 +20,11 @@ class StudentsAdapter : RecyclerView.Adapter<StudentsAdapter.StudentViewHolder>(
         notifyDataSetChanged()
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StudentViewHolder {
-       val inflater = LayoutInflater.from(parent.context)
+      /* val inflater = LayoutInflater.from(parent.context)
         val binding = StudentRowBinding.inflate(inflater,parent,false)
-        return StudentViewHolder(binding)
+        return StudentViewHolder(binding)*/
+        return StudentViewHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context),R.layout.student_row,parent,false))
+
     }
 
     override fun onBindViewHolder(holder: StudentViewHolder, position: Int) {

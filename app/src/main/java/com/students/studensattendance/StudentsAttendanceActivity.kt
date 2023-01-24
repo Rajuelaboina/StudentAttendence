@@ -7,6 +7,7 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
 import com.students.studensattendance.`interface`.onCheckNetWorkState
@@ -29,11 +30,12 @@ class StudentsAttendanceActivity : AppCompatActivity(), onCheckNetWorkState {
         binding = StudentAttendanceBinding.inflate(layoutInflater)
         setContentView(binding.root)
        // setContentView(R.layout.student_attendance)
-        val request = RetrofitRequest.getInstance()
-        val repositroy = StudentRepositroy(request)
-        studentsViewModel = ViewModelProvider(this,StudentViewModelHelper(repositroy))[StudentsViewModel::class.java]
-        studentsViewModel.getStudentDetails()
-
+      //  val request = RetrofitRequest.getInstance()
+      //  val repositroy = StudentRepositroy(request)
+      //  studentsViewModel = ViewModelProvider(this,StudentViewModelHelper(repositroy))[StudentsViewModel::class.java]
+         studentsViewModel = ViewModelProvider(this)[StudentsViewModel::class.java]
+       // studentsViewModel.getStudentDetails()
+        binding.setStu
 
         if (NetworkConnection.isInterNetOn(applicationContext)){
             loadingData()
@@ -79,9 +81,12 @@ class StudentsAttendanceActivity : AppCompatActivity(), onCheckNetWorkState {
 
     private fun loadingData() {
         binding.refreshLayout2.isRefreshing = true
-        val request = RetrofitRequest.getInstance()
-        val repositroy = StudentRepositroy(request)
-        studentsViewModel = ViewModelProvider(this,StudentViewModelHelper(repositroy))[StudentsViewModel::class.java]
+       // val request = RetrofitRequest.getInstance()
+       // val repositroy = StudentRepositroy(request)
+       // studentsViewModel = ViewModelProvider(this,StudentViewModelHelper(repositroy))[StudentsViewModel::class.java]
+       // studentsViewModel = ViewModelProvider(this)[StudentsViewModel::class.java]
+        // studentsViewModel.getStudentDetails()
+      //  binding.setStu
         studentsViewModel.getStudentDetails()
         studentsViewModel.getStudentsData().observe(this) {
             // Log.e("Data list","List: "+ it.get(0).Student_name)
@@ -90,9 +95,10 @@ class StudentsAttendanceActivity : AppCompatActivity(), onCheckNetWorkState {
             if (it != null) {
                 val adapter = StudentsAdapter()
                 adapter.setstudentList(it, applicationContext)
-                binding.recyclerView.adapter = adapter
+               // binding.recyclerView.adapter = adapter
             }
         }
+
 
         studentsViewModel.getLoadingStats().observe(this) {
             when (it) {
