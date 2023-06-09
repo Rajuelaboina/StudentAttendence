@@ -107,4 +107,22 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }*/
+   
+    /*private fun getJsonAssetesFrom(context: Context?, filename: String): String {
+        var string = ""
+        if (context != null) {
+            string = context.assets.open(filename).bufferedReader().use { it.readText() }
+        }
+        return string
+    }
+
+    fun getAssetes(){
+        val strngJson = getJsonAssetesFrom(applicationContext,"data.json")
+        val gson = Gson()
+        val strType = object :TypeToken<UserList>(){}.type
+        val list:UserList = gson.fromJson(strngJson,strType)
+        recyclerView = findViewById(R.id.recyclerView)
+        val adapter = UserAdapter(list.data)
+        recyclerView.adapter = adapter
+    }*/
 }
