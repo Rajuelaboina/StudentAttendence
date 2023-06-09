@@ -47,3 +47,41 @@ class StudentsAdapter : RecyclerView.Adapter<StudentsAdapter.StudentViewHolder>(
         }
     }
 }
+
+/*class MyAdapter: RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
+    var listMovies = ArrayList<Movies>()
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
+        return MyViewHolder(DataBindingUtil.inflate<RowitemBinding>(LayoutInflater.from(parent.context),R.layout.rowitem,parent,false))
+    }
+
+    override fun getItemCount(): Int {
+        return listMovies.size
+    }
+
+    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+        Log.e("onBindViewHolder","response: ${listMovies.get(position).category}")
+       holder.bind(listMovies[position])
+        with(holder){
+            with(listMovies[position]){
+                binding.linearLayout.visibility = if (this.expand) View.VISIBLE else View.GONE
+                binding.cardLayout.setOnClickListener {
+                    this.expand = !this.expand
+                    notifyDataSetChanged()
+                }
+            }
+        }
+    }
+
+    fun updateList(list: List<Movies>) {
+        listMovies= list as ArrayList<Movies>
+        notifyDataSetChanged()
+    }
+
+    class MyViewHolder(var binding: RowitemBinding) : ViewHolder(binding.root){
+            fun bind(moviesItem: Movies) {
+               binding.model = moviesItem
+            }
+    }
+
+
+}*/
